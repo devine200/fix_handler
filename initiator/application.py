@@ -37,12 +37,6 @@ class Application(fix.Application):
     def toAdmin(self, message, sessionID):
         msgType = fix.MsgType()
         message.getHeader().getField(msgType)
-
-        # print(msgType.getValue())
-        # print(fix.MsgType_Logon)
-
-        # if self.verbose:
-        #     print(f'[toAdmin] {sessionID} | {read_FIX_message(message)}')
         
         if msgType.getValue() == fix.MsgType_Logon:
             message.setField(fix.EncryptMethod(0))
@@ -50,19 +44,6 @@ class Application(fix.Application):
             print(fix.ResetSeqNumFlag(True))
             message.setField(fix.ResetSeqNumFlag(True))
             message.setField(fix.Password("rI383@l"))
-
-        elif msgType.getValue() == fix.MsgType_Logout:
-            
-            print(self._client_str + 'Sending LOGOUT Request')
-        
-        elif (msgType.getValue() == fix.MsgType_Heartbeat):
-           
-            # if self.verbose:
-            print(self._client_str + 'Heartbeat!')
-            
-        else:
-            # print(f'[toAdmin] {sessionID} | {read_FIX_message(message)}')
-            pass
             
         msg = message.toString().replace(__SOH__, "|")
         logfix.info("(Admin) S >> %s" % msg)
